@@ -75,6 +75,30 @@ namespace BL.Services
             return new AdvertisingDTO { ID = ad.ID, Name = ad.Name, Price = ad.Price, Description = ad.Description, Type = ad.Type };
         }
 
+        public void EditAd(int? id, AdvertisingDTO ad)
+        {
+            if (id == null)
+                throw new ValidationException("Advertising ID is not set", "");
+            var ad_old = Database.Ads.Get(id.Value);
+            if (ad_old == null)
+                throw new ValidationException("No ads found", "");
+            Advertising temp = new Advertising { ID = ad.ID, Name = ad.Name, Price = ad.Price, Description = ad.Description, Type = ad.Type };
+            Database.Ads.Update(temp);
+        }
+
+        public IEnumerable<AdvertisingDTO> FindAds(string s_word)
+        {
+            List<Advertising> ad_list = new List<Advertising>();
+            foreach (Advertising a in Database.Ads.GetAll())
+            {
+                if (a.Name.Contains(s_word) || a.Type.Contains(s_word) || a.Description.Contains(s_word))
+                    ad_list.Add(a);
+            }
+
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Advertising, AdvertisingDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Advertising>, List<AdvertisingDTO>>(ad_list);
+        }
+
         public void Dispose()
         {
             Database.Dispose();
