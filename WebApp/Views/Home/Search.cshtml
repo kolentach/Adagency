@@ -1,26 +1,12 @@
 ﻿@model IEnumerable<Web.Models.AdvertisingViewModel>
 
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Search";
 }
-<div style="">
-    @Html.ActionLink("Login", "../Account/Login")
-    @Html.ActionLink("Signup", "../Account/Signup")
-</div>
 
-<div>
-    @using (Html.BeginForm("Index", "Home", FormMethod.Get))
-    {
-        <p>
-            Title: @Html.TextBox("SearchString") <br />
-            <input type="submit" value="Search" />
-        </p>
-    }
-</div>
+<h2>SearchResult</h2>
 
-
-
-<h2>Service list</h2>
 <div id="results">
     <table class="table">
         <tr>

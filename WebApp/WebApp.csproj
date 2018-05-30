@@ -231,7 +231,7 @@
     <Compile Include="Models\AdvertisingViewModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\OrderViewModel.cs" />
-    <Compile Include="Models\PolygraphyDTO.cs" />
+    <Compile Include="Models\PolygraphyViewModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\OrderModule.cs" />
@@ -334,7 +334,9 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Signup.cshtml" />
-    <Content Include="Views\Home\EditOrder.cshtml" />
+    <Content Include="Views\Home\EditAd.cshtml" />
+    <Content Include="Views\Home\MakePolygraphyOrder.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -379,7 +381,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>53953</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:53953/</IISUrl>
+          <IISUrl>http://localhost:55179/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
