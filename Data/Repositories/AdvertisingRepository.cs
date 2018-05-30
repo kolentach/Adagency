@@ -27,14 +27,23 @@ namespace Data.Repositories
             return db.Ads.Find(id);
         }
 
-        public void Create(Advertising book)
+        public void Create(Advertising ad)
         {
-            db.Ads.Add(book);
+            db.Ads.Add(ad);
         }
 
-        public void Update(Advertising book)
+        public void Update(Advertising ad)
         {
-            db.Entry(book).State = EntityState.Modified;
+            var adInDb = db.Ads.Find(ad.ID);
+            if (adInDb == null)
+            {
+                db.Ads.Add(ad);
+                return;
+            }
+            
+            db.Entry(adInDb).CurrentValues.SetValues(ad);
+            db.Entry(adInDb).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
         public IEnumerable<Advertising> Find(Func<Advertising, Boolean> predicate)
@@ -44,9 +53,9 @@ namespace Data.Repositories
 
         public void Delete(int id)
         {
-            Advertising book = db.Ads.Find(id);
-            if (book != null)
-                db.Ads.Remove(book);
+            Advertising ad = db.Ads.Find(id);
+            if (ad != null)
+                db.Ads.Remove(ad);
         }
     }
 }
