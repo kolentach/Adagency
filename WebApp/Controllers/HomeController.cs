@@ -1,20 +1,12 @@
-﻿using System.Web;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using BL.Interfaces;
 using BL.DTO;
 using Web.Models;
 using AutoMapper;
 using BL.Infrastructure;
-using UserStore.BLL.Interfaces;
-using Microsoft.AspNet.Identity.Owin;
-
-using Microsoft.Owin.Security;
-using System.Threading.Tasks;
-using UserStore.Models;
-using UserStore.BLL.DTO;
-using System.Security.Claims;
-using UserStore.BLL.Infrastructure;
+using System;
+using System.Linq;
 
 namespace NLayerApp.WEB.Controllers
 {
@@ -36,7 +28,59 @@ namespace NLayerApp.WEB.Controllers
             return View(ads);
         }
 
-        [Authorize]
+       
+        public ActionResult Index(string searchString)
+        {
+            var ads = from a in orderService.GetAds()
+                           select a;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ads = ads.Where(s => s.Name.Contains(searchString) || s.Description.Contains(searchString) || s.Type.Contains(searchString));
+            }
+
+            return View(ads);
+        }
+
+        [HttpPost]
+        public string Indexe(FormCollection fc, string searchString)
+        {
+            return "<h3> From [HttpPost]Index: " + searchString + "</h3>";
+        }
+
+        [Authorize(Roles = "manager, admin")]
+        public ActionResult EditAd(int? id)
+        {
+            try
+            {
+                AdvertisingDTO ad = orderService.GetAdvertising(id);
+                AdvertisingViewModel adVM = new AdvertisingViewModel { ID = ad.ID, Description = ad.Description, Name = ad.Name, Price = ad.Price, Type = ad.Type };
+                return View(adVM);
+            }
+            catch (ValidationException ex)
+            {
+                return Content(ex.Message);
+            }
+        }
+
+        [Authorize(Roles="manager, admin")]
+        [HttpPost]
+        public ActionResult EditAd(AdvertisingViewModel ad)
+        {
+            try
+            {
+                AdvertisingDTO new_ad = new AdvertisingDTO { ID = ad.ID, Description = ad.Description, Name = ad.Name, Price = ad.Price, Type = ad.Type };
+
+                orderService.EditAd(new_ad.ID, new_ad);
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch (ValidationException ex)
+            {
+                return Content(ex.Message);
+            }
+        }
+
+        [Authorize(Roles="user")]
         public ActionResult MakeOrder(int? id)
         {
             try
@@ -51,6 +95,8 @@ namespace NLayerApp.WEB.Controllers
                 return Content(ex.Message);
             }
         }
+
+        [Authorize(Roles = "user")]
         [HttpPost]
         public ActionResult MakeOrder(OrderViewModel order)
         {
@@ -67,7 +113,7 @@ namespace NLayerApp.WEB.Controllers
             return View(order);
         }
 
-        [Authorize]
+        [Authorize(Roles = "user")]
         public ActionResult MakePolygraphyOrder(int? id)
         {
             try
@@ -82,6 +128,8 @@ namespace NLayerApp.WEB.Controllers
                 return Content(ex.Message);
             }
         }
+
+        [Authorize(Roles = "user")]
         [HttpPost]
         public ActionResult MakePolygraphyOrder(PolygraphyViewModel order)
         {

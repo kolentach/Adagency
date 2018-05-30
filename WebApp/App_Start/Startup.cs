@@ -21,6 +21,7 @@ namespace UserStore.App_Start
                 LoginPath = new PathString("/Account/Login"),
             });
         }
+        
 
         private IUserService CreateUserService()
         {

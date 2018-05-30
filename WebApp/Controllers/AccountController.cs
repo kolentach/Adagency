@@ -91,7 +91,7 @@ namespace UserStore.Controllers
                 };
                 OperationDetails operationDetails = await UserService.Create(userDto);
                 if (operationDetails.Succedeed)
-                    return View("SuccessRegister");
+                    return RedirectToAction("Index", "Home");
                 else
                     ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
@@ -102,11 +102,21 @@ namespace UserStore.Controllers
         {
             await UserService.SetInitialData(new UserDTO
             {
-                Email = "somemail@mail.ru",
-                UserName = "somemail@mail.ru",
-                Password = "ad46D_ewr3",
-                Name = "Семен Семенович Горбунков",
-                Address = "ул. Спортивная, д.30, кв.75",
+                Email = "serh.mor@gmail.com",
+                UserName = "serh.mor@gmail.com",
+                Password = "qwerty123",
+                Name = "Serhiy Morenko",
+                Address = "Nizhynska St. 29D",
+                Role = "admin",
+            }, new List<string> { "user", "admin" });
+
+            await UserService.SetInitialData(new UserDTO
+            {
+                Email = "lilya.oryn@gmail.com",
+                UserName = "lilya.oryn@gmail.com",
+                Password = "qwerty123",
+                Name = "Lilya Orynych",
+                Address = "Nizhynska St. 29D",
                 Role = "admin",
             }, new List<string> { "user", "admin" });
         }
